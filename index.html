@@ -22,61 +22,84 @@
     <!-- Fullscreen map -->
     <div id="map"></div>
 
-    <!-- Top status fade / mood layer -->
+    <!-- Mood / top vignette -->
     <div class="screen-vignette"></div>
 
-    <!-- Search bar -->
+    <!-- Search -->
     <div class="search-wrap">
       <div class="search-bar">
         <span class="search-icon">⌕</span>
         <input
           id="searchInput"
           type="text"
-          placeholder="Fogo Cape Verde"
+          placeholder="Search West Africa songs"
           autocomplete="off"
         />
-        <button id="clearSearch" class="clear-btn" aria-label="Clear search">✕</button>
+        <button
+          id="clearSearch"
+          class="clear-btn"
+          aria-label="Clear search"
+          type="button"
+        >
+          ✕
+        </button>
       </div>
     </div>
 
-    <!-- Right controls -->
+    <!-- Right-side controls -->
     <div class="map-controls">
-      <button id="styleToggle" class="control-btn" aria-label="Toggle map style">
+      <button
+        id="styleToggle"
+        class="control-btn"
+        aria-label="Toggle map style"
+        type="button"
+      >
         <span>▥</span>
       </button>
-      <button id="locateBtn" class="control-btn" aria-label="Locate me">
+
+      <button
+        id="locateBtn"
+        class="control-btn"
+        aria-label="Locate me"
+        type="button"
+      >
         <span>⌖</span>
       </button>
     </div>
 
-    <!-- Bottom mini player -->
+    <!-- Mini player -->
     <div id="miniPlayer" class="mini-player hidden">
       <div class="mini-player-inner">
         <div class="mini-meta">
           <div id="miniTitle" class="mini-title">Song Title</div>
           <div id="miniLocation" class="mini-location">Location</div>
         </div>
+
         <div class="mini-actions">
-          <button id="openSheetBtn" class="mini-open">Open</button>
+          <button id="openSheetBtn" class="mini-open" type="button">
+            Open
+          </button>
         </div>
       </div>
     </div>
 
-    <!-- Bottom sheet -->
+    <!-- Backdrop -->
     <div id="sheetBackdrop" class="sheet-backdrop hidden"></div>
+
+    <!-- Bottom sheet -->
     <section id="songSheet" class="song-sheet hidden" aria-hidden="true">
       <div class="sheet-handle"></div>
 
       <div class="sheet-header">
         <div class="sheet-pill">Unlocked Location</div>
-        <h2 id="sheetTitle">Volcano Echoes</h2>
-        <p id="sheetPlace">Pico do Fogo, Cape Verde</p>
+        <h2 id="sheetTitle">Maria Julia</h2>
+        <p id="sheetPlace">Santiago Island, Cape Verde</p>
       </div>
 
       <div class="sheet-art-wrap">
         <img
           id="sheetArt"
-          src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80"
+          src="images/maria-julia.jpg"
           alt="Song artwork"
         />
       </div>
@@ -92,8 +115,12 @@
       </div>
 
       <div class="sheet-actions">
-        <button id="playSongBtn" class="primary-btn">Play Song</button>
-        <button id="closeSheetBtn" class="secondary-btn">Close</button>
+        <button id="playSongBtn" class="primary-btn" type="button">
+          Play Song
+        </button>
+        <button id="closeSheetBtn" class="secondary-btn" type="button">
+          Close
+        </button>
       </div>
     </section>
   </div>
