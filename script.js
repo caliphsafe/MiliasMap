@@ -1,66 +1,95 @@
-// Replace with your token
 mapboxgl.accessToken = "YOUR_MAPBOX_ACCESS_TOKEN";
 
 const locations = [
   {
-    id: "fogo",
-    title: "Volcano Echoes",
-    place: "Pico do Fogo, Cape Verde",
+    id: "maria-julia",
+    title: "Maria Julia",
+    place: "Santiago Island, Cape Verde",
     country: "Cape Verde",
-    coords: [-24.35, 14.95],
-    description: "A cinematic track unlocked at the volcanic heights of Fogo.",
-    audio: "audio/volcano-echoes.mp3",
-    art: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1200&q=80"
+    coords: [-23.60, 15.10],
+    description: "Unlocked in Santiago Island, Cape Verde.",
+    audio: "audio/maria-julia.mp3",
+    art: "images/maria-julia.jpg"
   },
   {
-    id: "praia",
-    title: "Atlantic Memory",
-    place: "Praia, Santiago, Cape Verde",
+    id: "pilon-pilon",
+    title: "Pilon Pilon",
+    place: "São Nicolau, Cape Verde",
     country: "Cape Verde",
-    coords: [-23.51, 14.92],
-    description: "A late-night ocean memory piece tied to the capital shoreline.",
-    audio: "audio/atlantic-memory.mp3",
-    art: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80"
+    coords: [-24.33, 16.60],
+    description: "Unlocked on the island of São Nicolau, Cape Verde.",
+    audio: "audio/pilon-pilon.mp3",
+    art: "images/pilon-pilon.jpg"
   },
   {
-    id: "mindelo",
-    title: "Harbor Light",
-    place: "Mindelo, São Vicente, Cape Verde",
-    country: "Cape Verde",
-    coords: [-24.98, 16.88],
-    description: "A warm, drifting song built around port-city energy and nostalgia.",
-    audio: "audio/harbor-light.mp3",
-    art: "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1200&q=80"
-  },
-  {
-    id: "abidjan",
-    title: "Lagoon Frequency",
+    id: "polygamy",
+    title: "Polygamy",
     place: "Abidjan, Ivory Coast",
     country: "Ivory Coast",
-    coords: [-4.03, 5.36],
-    description: "A sleek and rhythmic city record tied to the pulse of Abidjan.",
-    audio: "audio/lagoon-frequency.mp3",
-    art: "https://images.unsplash.com/photo-1493246507139-91e8fad9978e?auto=format&fit=crop&w=1200&q=80"
+    coords: [-4.0083, 5.3599],
+    description: "Unlocked in Abidjan, Ivory Coast.",
+    audio: "audio/polygamy.mp3",
+    art: "images/polygamy.jpg"
   },
   {
-    id: "yamoussoukro",
-    title: "Stone & Sky",
-    place: "Yamoussoukro, Ivory Coast",
-    country: "Ivory Coast",
-    coords: [-5.28, 6.82],
-    description: "A reflective song unlocked inland, wide and spiritual in feeling.",
-    audio: "audio/stone-and-sky.mp3",
-    art: "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1200&q=80"
+    id: "minina",
+    title: "Minina",
+    place: "Praia, Santiago, Cape Verde",
+    country: "Cape Verde",
+    coords: [-23.5133, 14.9330],
+    description: "Unlocked in Praia, Cape Verde.",
+    audio: "audio/minina.mp3",
+    art: "images/minina.jpg"
   },
   {
-    id: "grandbassam",
-    title: "Palm Signal",
-    place: "Grand-Bassam, Ivory Coast",
-    country: "Ivory Coast",
-    coords: [-3.74, 5.20],
-    description: "A soft coastal groove tied to movement, memory, and heat.",
-    audio: "audio/palm-signal.mp3",
-    art: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80"
+    id: "leave",
+    title: "Leave",
+    place: "Brava, Cape Verde",
+    country: "Cape Verde",
+    coords: [-24.72, 14.87],
+    description: "Unlocked on Brava island, Cape Verde.",
+    audio: "audio/leave.mp3",
+    art: "images/leave.jpg"
+  },
+  {
+    id: "allons-y",
+    title: "Allons-Y",
+    place: "Fogo, Cape Verde",
+    country: "Cape Verde",
+    coords: [-24.35, 14.95],
+    description: "Unlocked on Fogo island, Cape Verde.",
+    audio: "audio/allons-y.mp3",
+    art: "images/allons-y.jpg"
+  },
+  {
+    id: "not-today",
+    title: "Not Today",
+    place: "Abuja, Nigeria",
+    country: "Nigeria",
+    coords: [7.3986, 9.0765],
+    description: "Unlocked in Abuja, the capital of Nigeria.",
+    audio: "audio/not-today.mp3",
+    art: "images/not-today.jpg"
+  },
+  {
+    id: "outside",
+    title: "Outside",
+    place: "Dakar, Senegal",
+    country: "Senegal",
+    coords: [-17.4677, 14.7167],
+    description: "Unlocked in Dakar, Senegal.",
+    audio: "audio/outside.mp3",
+    art: "images/outside.jpg"
+  },
+  {
+    id: "plenty-love",
+    title: "Plenty Love",
+    place: "Conakry, Guinea",
+    country: "Guinea",
+    coords: [-13.6773, 9.6412],
+    description: "Unlocked in Conakry, Guinea.",
+    audio: "audio/plenty-love.mp3",
+    art: "images/plenty-love.jpg"
   }
 ];
 
@@ -68,6 +97,7 @@ const mapStyles = [
   "mapbox://styles/mapbox/navigation-night-v1",
   "mapbox://styles/mapbox/dark-v11"
 ];
+
 let currentStyleIndex = 0;
 let currentSong = null;
 let map;
@@ -113,23 +143,51 @@ function buildGeoJSON() {
   };
 }
 
+function getLocationsBounds() {
+  const bounds = new mapboxgl.LngLatBounds();
+
+  locations.forEach((loc) => {
+    bounds.extend(loc.coords);
+  });
+
+  return bounds;
+}
+
 function initMap() {
   geojson = buildGeoJSON();
 
   map = new mapboxgl.Map({
     container: "map",
     style: mapStyles[currentStyleIndex],
-    center: [-15.5, 10.2],
-    zoom: 3.15,
+    center: [-10, 10],
+    zoom: 3.2,
     pitch: 0,
     bearing: 0,
-    attributionControl: false
+    attributionControl: false,
+    projection: "mercator"
   });
 
-  map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), "top-left");
+  map.addControl(
+    new mapboxgl.NavigationControl({ showCompass: false }),
+    "top-left"
+  );
 
   map.on("load", () => {
     addSourcesAndLayers();
+
+    map.resize();
+
+    const bounds = getLocationsBounds();
+    map.fitBounds(bounds, {
+      padding: {
+        top: 120,
+        right: 60,
+        bottom: 220,
+        left: 60
+      },
+      maxZoom: 5.3,
+      duration: 0
+    });
   });
 }
 
@@ -140,7 +198,7 @@ function addSourcesAndLayers() {
     type: "geojson",
     data: geojson,
     cluster: true,
-    clusterMaxZoom: 7,
+    clusterMaxZoom: 6,
     clusterRadius: 55
   });
 
@@ -150,7 +208,7 @@ function addSourcesAndLayers() {
     source: "songs",
     filter: ["has", "point_count"],
     paint: {
-      "circle-color": "#cdbeb0",
+      "circle-color": "#d1c0af",
       "circle-radius": [
         "step",
         ["get", "point_count"],
@@ -159,7 +217,7 @@ function addSourcesAndLayers() {
         6, 30
       ],
       "circle-stroke-width": 2,
-      "circle-stroke-color": "rgba(255,255,255,0.85)"
+      "circle-stroke-color": "rgba(255,255,255,0.88)"
     }
   });
 
@@ -174,7 +232,7 @@ function addSourcesAndLayers() {
       "text-size": 14
     },
     paint: {
-      "text-color": "#122033"
+      "text-color": "#102035"
     }
   });
 
@@ -184,7 +242,7 @@ function addSourcesAndLayers() {
     source: "songs",
     filter: ["!", ["has", "point_count"]],
     paint: {
-      "circle-color": "#95d3ff",
+      "circle-color": "#90d2ff",
       "circle-radius": 8,
       "circle-stroke-width": 3,
       "circle-stroke-color": "#ffffff"
@@ -193,9 +251,13 @@ function addSourcesAndLayers() {
 
   map.on("click", "clusters", (e) => {
     const features = map.queryRenderedFeatures(e.point, { layers: ["clusters"] });
+    if (!features.length) return;
+
     const clusterId = features[0].properties.cluster_id;
+
     map.getSource("songs").getClusterExpansionZoom(clusterId, (err, zoom) => {
       if (err) return;
+
       map.easeTo({
         center: features[0].geometry.coordinates,
         zoom
@@ -205,11 +267,12 @@ function addSourcesAndLayers() {
 
   map.on("click", "unclustered-point", (e) => {
     const feature = e.features[0];
+    if (!feature) return;
+
     const id = feature.properties.id;
     const match = locations.find((loc) => loc.id === id);
-    if (match) {
-      openSong(match);
-    }
+
+    if (match) openSong(match);
   });
 
   map.on("mouseenter", "clusters", () => {
@@ -239,14 +302,18 @@ function openSong(song) {
   sheetTitle.textContent = song.title;
   sheetPlace.textContent = song.place;
   sheetDescription.textContent = song.description;
-  sheetArt.src = song.art;
-  sheetArt.alt = `${song.title} artwork`;
-  audioPlayer.src = song.audio;
+
+  if (song.art) {
+    sheetArt.src = song.art;
+    sheetArt.alt = `${song.title} artwork`;
+  }
+
+  audioPlayer.src = song.audio || "";
 
   map.easeTo({
     center: song.coords,
-    zoom: 8,
-    duration: 1400
+    zoom: 7.2,
+    duration: 1200
   });
 
   showSheet();
@@ -280,12 +347,37 @@ function searchPlaces() {
 
   if (found) {
     openSong(found);
+    return;
   }
+
+  const bounds = getLocationsBounds();
+  map.fitBounds(bounds, {
+    padding: {
+      top: 120,
+      right: 60,
+      bottom: 220,
+      left: 60
+    },
+    maxZoom: 5.3,
+    duration: 900
+  });
 }
 
 function clearSearchField() {
   searchInput.value = "";
   searchInput.focus();
+
+  const bounds = getLocationsBounds();
+  map.fitBounds(bounds, {
+    padding: {
+      top: 120,
+      right: 60,
+      bottom: 220,
+      left: 60
+    },
+    maxZoom: 5.3,
+    duration: 900
+  });
 }
 
 function locateUser() {
@@ -299,7 +391,7 @@ function locateUser() {
       map.easeTo({
         center: [lng, lat],
         zoom: 10,
-        duration: 1400
+        duration: 1200
       });
 
       new mapboxgl.Marker({ color: "#ffffff" })
@@ -307,9 +399,10 @@ function locateUser() {
         .addTo(map);
     },
     () => {
-      alert("Location access was denied or unavailable.");
+      // no alert so the experience feels cleaner like iOS
+      console.log("Location access denied or unavailable.");
     },
-    { enableHighAccuracy: true }
+    { enableHighAccuracy: true, timeout: 10000 }
   );
 }
 
@@ -323,6 +416,7 @@ function rebuildMapStyle() {
 
   map.once("style.load", () => {
     addSourcesAndLayers();
+
     map.jumpTo({
       center: currentCenter,
       zoom: currentZoom,
