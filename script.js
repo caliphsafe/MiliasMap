@@ -17,7 +17,7 @@ const locations = [
     place: "São Nicolau, Cape Verde",
     country: "Cape Verde",
     coords: [-24.33, 16.60],
-    description: "Unlocked on the island of São Nicolau, Cape Verde.",
+    description: "Unlocked on São Nicolau, Cape Verde.",
     audio: "audio/pilon-pilon.mp3",
     art: "images/pilon-pilon.jpg"
   },
@@ -47,7 +47,7 @@ const locations = [
     place: "Brava, Cape Verde",
     country: "Cape Verde",
     coords: [-24.72, 14.87],
-    description: "Unlocked on Brava island, Cape Verde.",
+    description: "Unlocked on Brava, Cape Verde.",
     audio: "audio/leave.mp3",
     art: "images/leave.jpg"
   },
@@ -57,7 +57,7 @@ const locations = [
     place: "Fogo, Cape Verde",
     country: "Cape Verde",
     coords: [-24.35, 14.95],
-    description: "Unlocked on Fogo island, Cape Verde.",
+    description: "Unlocked on Fogo, Cape Verde.",
     audio: "audio/allons-y.mp3",
     art: "images/allons-y.jpg"
   },
@@ -67,7 +67,7 @@ const locations = [
     place: "Abuja, Nigeria",
     country: "Nigeria",
     coords: [7.3986, 9.0765],
-    description: "Unlocked in Abuja, the capital of Nigeria.",
+    description: "Unlocked in Abuja, Nigeria.",
     audio: "audio/not-today.mp3",
     art: "images/not-today.jpg"
   },
@@ -91,6 +91,11 @@ const locations = [
     audio: "audio/plenty-love.mp3",
     art: "images/plenty-love.jpg"
   }
+];
+
+const WEST_AFRICA_BOUNDS = [
+  [-26.5, 3.5],  // southwest
+  [9.5, 18.8]    // northeast
 ];
 
 const mapStyles = [
@@ -143,28 +148,19 @@ function buildGeoJSON() {
   };
 }
 
-function getLocationsBounds() {
-  const bounds = new mapboxgl.LngLatBounds();
-
-  locations.forEach((loc) => {
-    bounds.extend(loc.coords);
-  });
-
-  return bounds;
-}
-
 function initMap() {
   geojson = buildGeoJSON();
 
   map = new mapboxgl.Map({
     container: "map",
     style: mapStyles[currentStyleIndex],
-    center: [-10, 10],
-    zoom: 3.2,
+    center: [-10.5, 11.5],
+    zoom: 3.9,
     pitch: 0,
     bearing: 0,
+    projection: "mercator",
     attributionControl: false,
-    projection: "mercator"
+    maxBounds: WEST_AFRICA_BOUNDS
   });
 
   map.addControl(
@@ -175,17 +171,13 @@ function initMap() {
   map.on("load", () => {
     addSourcesAndLayers();
 
-    map.resize();
-
-    const bounds = getLocationsBounds();
-    map.fitBounds(bounds, {
+    map.fitBounds(WEST_AFRICA_BOUNDS, {
       padding: {
-        top: 120,
-        right: 60,
-        bottom: 220,
-        left: 60
+        top: 100,
+        right: 50,
+        bottom: 210,
+        left: 50
       },
-      maxZoom: 5.3,
       duration: 0
     });
   });
@@ -199,7 +191,7 @@ function addSourcesAndLayers() {
     data: geojson,
     cluster: true,
     clusterMaxZoom: 6,
-    clusterRadius: 55
+    clusterRadius: 50
   });
 
   map.addLayer({
@@ -208,13 +200,13 @@ function addSourcesAndLayers() {
     source: "songs",
     filter: ["has", "point_count"],
     paint: {
-      "circle-color": "#d1c0af",
+      "circle-color": "#d7c5b3",
       "circle-radius": [
         "step",
         ["get", "point_count"],
-        22,
-        3, 26,
-        6, 30
+        20,
+        3, 24,
+        6, 28
       ],
       "circle-stroke-width": 2,
       "circle-stroke-color": "rgba(255,255,255,0.88)"
@@ -232,7 +224,7 @@ function addSourcesAndLayers() {
       "text-size": 14
     },
     paint: {
-      "text-color": "#102035"
+      "text-color": "#0d1d31"
     }
   });
 
@@ -242,7 +234,7 @@ function addSourcesAndLayers() {
     source: "songs",
     filter: ["!", ["has", "point_count"]],
     paint: {
-      "circle-color": "#90d2ff",
+      "circle-color": "#9ed6ff",
       "circle-radius": 8,
       "circle-stroke-width": 3,
       "circle-stroke-color": "#ffffff"
@@ -270,9 +262,9 @@ function addSourcesAndLayers() {
     if (!feature) return;
 
     const id = feature.properties.id;
-    const match = locations.find((loc) => loc.id === id);
+    const song = locations.find((loc) => loc.id === id);
 
-    if (match) openSong(match);
+    if (song) openSong(song);
   });
 
   map.on("mouseenter", "clusters", () => {
@@ -302,17 +294,13 @@ function openSong(song) {
   sheetTitle.textContent = song.title;
   sheetPlace.textContent = song.place;
   sheetDescription.textContent = song.description;
-
-  if (song.art) {
-    sheetArt.src = song.art;
-    sheetArt.alt = `${song.title} artwork`;
-  }
-
+  sheetArt.src = song.art;
+  sheetArt.alt = `${song.title} artwork`;
   audioPlayer.src = song.audio || "";
 
   map.easeTo({
     center: song.coords,
-    zoom: 7.2,
+    zoom: 6.6,
     duration: 1200
   });
 
@@ -350,32 +338,27 @@ function searchPlaces() {
     return;
   }
 
-  const bounds = getLocationsBounds();
-  map.fitBounds(bounds, {
+  map.fitBounds(WEST_AFRICA_BOUNDS, {
     padding: {
-      top: 120,
-      right: 60,
-      bottom: 220,
-      left: 60
+      top: 100,
+      right: 50,
+      bottom: 210,
+      left: 50
     },
-    maxZoom: 5.3,
     duration: 900
   });
 }
 
 function clearSearchField() {
   searchInput.value = "";
-  searchInput.focus();
 
-  const bounds = getLocationsBounds();
-  map.fitBounds(bounds, {
+  map.fitBounds(WEST_AFRICA_BOUNDS, {
     padding: {
-      top: 120,
-      right: 60,
-      bottom: 220,
-      left: 60
+      top: 100,
+      right: 50,
+      bottom: 210,
+      left: 50
     },
-    maxZoom: 5.3,
     duration: 900
   });
 }
@@ -399,18 +382,20 @@ function locateUser() {
         .addTo(map);
     },
     () => {
-      // no alert so the experience feels cleaner like iOS
       console.log("Location access denied or unavailable.");
     },
-    { enableHighAccuracy: true, timeout: 10000 }
+    {
+      enableHighAccuracy: true,
+      timeout: 10000
+    }
   );
 }
 
 function rebuildMapStyle() {
-  const currentCenter = map.getCenter();
-  const currentZoom = map.getZoom();
-  const currentBearing = map.getBearing();
-  const currentPitch = map.getPitch();
+  const center = map.getCenter();
+  const zoom = map.getZoom();
+  const bearing = map.getBearing();
+  const pitch = map.getPitch();
 
   map.setStyle(mapStyles[currentStyleIndex]);
 
@@ -418,10 +403,10 @@ function rebuildMapStyle() {
     addSourcesAndLayers();
 
     map.jumpTo({
-      center: currentCenter,
-      zoom: currentZoom,
-      bearing: currentBearing,
-      pitch: currentPitch
+      center,
+      zoom,
+      bearing,
+      pitch
     });
   });
 }
